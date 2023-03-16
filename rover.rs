@@ -6,7 +6,6 @@ const EAST: Direction = 1;
 const SOUTH: Direction = 2;
 const WEST: Direction = 3;
 
-#[derive(Copy, Clone)]
 struct Rover<'bounds> {
     x: Coord,
     y: Coord,
@@ -51,7 +50,6 @@ impl<'rover> Rover<'rover> {
     }
 }
 
-#[derive(Copy, Clone)]
 struct Bounds {
     x: u32,
     y: u32,
