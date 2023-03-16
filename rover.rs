@@ -7,15 +7,15 @@ const SOUTH: Direction = 2;
 const WEST: Direction = 3;
 
 #[derive(Copy, Clone)]
-struct Rover {
+struct Rover<'bounds> {
     x: Coord,
     y: Coord,
     d: Direction,
-    bounds: Bounds,
+    bounds: &'bounds Bounds,
 }
 
-impl Rover {
-    const fn new(x: Coord, y: Coord, d: Direction, bounds: Bounds) -> Self {
+impl<'rover> Rover<'rover> {
+    const fn new(x: Coord, y: Coord, d: Direction, bounds: &'rover Bounds) -> Self {
         Self { x, y, d, bounds }
     }
 
@@ -67,7 +67,7 @@ mod tests {
     use crate::{Bounds, Rover, NORTH};
 
     const BOUNDS: Bounds = Bounds::new(10, 10);
-    const INITIAL_ROVER: Rover = Rover::new(0, 0, NORTH, BOUNDS);
+    const INITIAL_ROVER: Rover = Rover::new(0, 0, NORTH, &BOUNDS);
 
     #[test]
     fn turning_left_four_times() {
@@ -123,7 +123,8 @@ mod tests {
 
     #[test]
     fn test_move_across_bounds() {
-        let initial: Rover = Rover::new(0, 0, NORTH, Bounds::new(2, 2));
+        let bounds = Bounds::new(2, 2);
+        let initial: Rover = Rover::new(0, 0, NORTH, &bounds);
         let rover = initial.forward().forward();
         assert_eq!(0, rover.x);
         assert_eq!(0, rover.y);
@@ -131,7 +132,8 @@ mod tests {
 
     #[test]
     fn test_move_across_bounds_south() {
-        let initial: Rover = Rover::new(0, 0, NORTH, Bounds::new(2, 2));
+        let bounds = Bounds::new(2, 2);
+        let initial: Rover = Rover::new(0, 0, NORTH, &bounds);
         let rover = initial.left().left().forward().forward();
         assert_eq!(0, rover.x);
         assert_eq!(0, rover.y);
